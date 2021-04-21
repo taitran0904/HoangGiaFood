@@ -1,17 +1,38 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { View, Text, SafeAreaView, StyleSheet, Dimensions, Image } from 'react-native'
 import { FlatList, TouchableHighlight } from "react-native-gesture-handler"
 
 import {Header} from "react-native-elements"
 
 import numTable from '../../data/numTable'
+import { openDatabase } from 'react-native-sqlite-storage';
+
+var db = openDatabase({ name: 'hg.db', createFromLocation: '~hg.db' });
 
 
 const {width} = Dimensions.get('screen');
 const cardWidth = width / 2 - 20;
 
 const HGSCreen = ({navigation}) => {
-    const EatTable = ({nT}) => {
+
+    const [items, setItems] = useState([]);
+useEffect(() => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        'SELECT * FROM "table"',
+        [],
+        (tx, results) => {
+          var temp = [];
+          for (let i = 0; i < results.rows.length; ++i)
+            temp.push(results.rows.item(i));
+          setItems(temp);
+        }
+      );
+        
+    });
+  }, []);
+
+    const EatTable = ({item}) => {
         return(
             <TouchableHighlight
                 underlayColor="#ffffff"
@@ -19,16 +40,16 @@ const HGSCreen = ({navigation}) => {
                 onPress={() => navigation.navigate("OrderScreen")}
                 >
                 { 
-                    nT.status == '0' ? 
+                    item.status == 0 ? 
                     <View style={[styles.eattable,{backgroundColor: 'white'}]}>
                         <View style={styles.etContainer}>
-                            <Text style={{fontSize: 18, fontWeight: 'bold', color: '#8A388F'}}>{nT.name}</Text>
+                            <Text style={{fontSize: 18, fontWeight: 'bold', color: '#8A388F'}}>{item.table_name}</Text>
                         </View>
                     </View> 
                     :
                     <View style={[styles.eattable,{backgroundColor: '#8A388F'}]}>
                         <View style={styles.etContainer}>
-                            <Text style={{fontSize: 18, fontWeight: 'bold', color: 'white'}}>{nT.name}</Text>
+                            <Text style={{fontSize: 18, fontWeight: 'bold', color: 'white'}}>{item.table_name}</Text>
                         </View>
                     </View> 
                 }
@@ -50,8 +71,8 @@ const HGSCreen = ({navigation}) => {
             <FlatList
                 showsVerticalScrollIndicator={false}
                 numColumns={2}
-                data={numTable}
-                renderItem={({item}) => <EatTable nT={item} />}
+                data={items}
+                renderItem={({item}) => <EatTable item={item} />}
             />
         </SafeAreaView>
       );

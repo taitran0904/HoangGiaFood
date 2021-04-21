@@ -7,8 +7,7 @@ import { FlatList } from "react-native-gesture-handler"
 
 import { openDatabase } from 'react-native-sqlite-storage';
 
-var db = openDatabase({ name: 'hgfood.db' });
-
+var db = openDatabase({ name: 'hg.db', createFromLocation: '~hg.db' });
 
 
 const OrderScreen = () => {
@@ -16,7 +15,7 @@ const OrderScreen = () => {
 useEffect(() => {
     db.transaction((tx) => {
       tx.executeSql(
-        'SELECT * FROM table_drink',
+        'SELECT * FROM food where status = 0',
         [],
         (tx, results) => {
           var temp = [];
@@ -40,7 +39,7 @@ useEffect(() => {
                         paddingVertical: 20,
                         flex: 1,
                     }}>
-                    <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{item.name_drink}</Text>
+                    <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{item.food_name}</Text>
                     <Text style={{ fontSize: 17, fontWeight: 'bold' }}>{item.price} VNĐ</Text>
                 </View>
                 <View style={{ marginRight: 20, alignItems: 'center' }}>
@@ -58,7 +57,7 @@ useEffect(() => {
             <FlatList
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{ paddingBottom: 80,}}
-                keyExtractor={(item) => item.id_drink}
+                keyExtractor={(item) => item.id}
                 data={items}
                 renderItem={({ item }) => <ItemMenu item={item} />}
             />

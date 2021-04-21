@@ -5,78 +5,27 @@ import Feather  from 'react-native-vector-icons/Feather';
 import * as Animatable from 'react-native-animatable'	
 import { openDatabase } from 'react-native-sqlite-storage';
 
-var db = openDatabase({ name: 'hgfood.db' });
+var db = openDatabase({ name: 'hg.db', createFromLocation: '~hg.db' });
 
 const SignInScreen = ({ navigation }) => {
     const [user, setuser] = useState('')
     const [pass, setpass] = useState('')
-
-    
-
-    useEffect(() => {
-        db.transaction(function (txn) {
-          txn.executeSql(
-            "SELECT name FROM sqlite_master WHERE type='table' AND name='table_food'",
-            [],
-            function (tx, res) {
-              console.log('item:', res.rows.length);
-              if (res.rows.length == 0) {
-                txn.executeSql('DROP TABLE IF EXISTS table_user', []);
-                txn.executeSql(
-                  'CREATE TABLE IF NOT EXISTS table_user(user_id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR(20), password VARCHAR(20), email VARCHAR(20))',
-                  []
-                );
-                txn.executeSql(
-                  'CREATE TABLE IF NOT EXISTS table_drink(id_drink INTEGER PRIMARY KEY AUTOINCREMENT, name_drink NVARCHAR(20), price NVARCHAR(20), image TEXT);',
-                  []
-                );
-                txn.executeSql(
-                    'CREATE TABLE IF NOT EXISTS table_food(id_food INTEGER PRIMARY KEY AUTOINCREMENT, name_food NVARCHAR(20), price NVARCHAR(20), image TEXT);',
-                    []
-                  );
-              }
-              
-            //   txn.executeSql(
-            //     'INSERT INTO table_food (id_food,name_food,price,image) VALUES (?,?,?,?)',
-            //     [1,'Cơm tấm','15.000','require("../images/food1.png")']
-            //   );
-            //   txn.executeSql(
-            //     'INSERT INTO table_food (id_food,name_food,price,image) VALUES (?,?,?,?)',
-            //     [2,'Bún','15.000','require("../images/food2.png")']
-            //   );
-            //   txn.executeSql(
-            //     'INSERT INTO table_food (id_food,name_food,price,image) VALUES (?,?,?,?)',
-            //     [3,'Lẩu','15.000','require("../images/food3.png")']
-            //   );
-            //   txn.executeSql(
-            //     'INSERT INTO table_food (id_food,name_food,price,image) VALUES (?,?,?,?)',
-            //     [4,'Gà nướng','15.000','require("../images/food4.png")']
-            //   );
-            //   txn.executeSql(
-            //     'INSERT INTO table_food (id_food,name_food,price,image) VALUES (?,?,?,?)',
-            //     [5,'Hủ tiếu','15.000','require("../images/food5.png")']
-            //   );
-            }
-          );
-        });
-      }, []);
 
       let login = () => {
         if(user==''||pass=='')
         Alert.alert("Vui lòng nhập tên đăng nhập hoặc mật khẩu")
         else
         db.transaction((tx) => {
-            var sql = 'SELECT username, password FROM table_user where username = \''+user+'\'';
+            var sql = 'SELECT username, password FROM user where username = \''+user+'\'';
           tx.executeSql(sql,[],
             (tx, results) => {
                 var len = results.rows.length;
                 if(len==0)
-                    Alert.alert("Tài khoản không tồn tại");
+                    Alert.alert("Tên đăng nhập hoặc mật khẩu sai");
                 else{
                     var row = results.rows.item(0);
                     if(pass == row.password)
                         navigation.navigate('HomeScreen');
-                       
                 }
             }
           );

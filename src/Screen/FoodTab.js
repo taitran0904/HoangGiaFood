@@ -6,14 +6,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { FlatList } from "react-native-gesture-handler"
 import { openDatabase } from 'react-native-sqlite-storage';
 
-var db = openDatabase({ name: 'hgfood.db' });
+var db = openDatabase({ name: 'hg.db', createFromLocation: '~hg.db' });
 
 const OrderScreen = () => {
     const [items, setItems] = useState([]);
         useEffect(() => {
             db.transaction((tx) => {
               tx.executeSql(
-                'SELECT * FROM table_food',
+                'SELECT * FROM food where status = 1',
                 [],
                 (tx, results) => {
                   var temp = [];
@@ -26,13 +26,13 @@ const OrderScreen = () => {
             });
           }, []);
     const ItemMenu = ({item}) => {
-        const [count, setcount] = useState(0)
-        const cong = () => setcount(x => x + 1)
-        const tru = () => setcount(x => x - 1)
+        // const [count, setcount] = useState(0)
+        // const cong = () => setcount(x => x + 1)
+        // const tru = () => setcount(x => x - 1)
     
         return(
             <View style={styles.cartCard}>
-                <Image source={require("../images/food1.png")} style={{height: 80, width: 80}}/>
+                <Image source={require("../images/food2.png")} style={{height: 60, width: 60}}/>
                 <View
                     style={{
                         height: 100,
@@ -40,17 +40,13 @@ const OrderScreen = () => {
                         paddingVertical: 20,
                         flex: 1,
                     }}>
-                    <Text style={{fontWeight: 'bold', fontSize: 16}}>{item.name_food}</Text>
+                    <Text style={{fontWeight: 'bold', fontSize: 16}}>{item.food_name}</Text>
                     <Text style={{fontSize: 17, fontWeight: 'bold'}}>{item.price} VNĐ</Text>
                 </View>
                 <View style={{marginRight: 20, alignItems: 'center'}}>
                     <View style={styles.actionBtn}>
-                        <TouchableOpacity onPress={tru}>
-                            <Ionicons name="remove" size={25} color="white" />
-                        </TouchableOpacity>
-                            <Text style={styles.amount}>{count}</Text>
-                        <TouchableOpacity onPress={cong}>
-                            <Feather name="plus" size={25} color="white" />    
+                        <TouchableOpacity >
+                            <Feather style={{textAlign: 'center'}} name="plus" size={25} color="white" />    
                         </TouchableOpacity>
                         
                     </View>
@@ -64,7 +60,7 @@ const OrderScreen = () => {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{paddingBottom: 80}}
                 data={items}
-                keyExtractor={(item) => item.id_food}
+                keyExtractor={(item) => item.id}
                 renderItem={({item}) => <ItemMenu item={item} />}
             />
             <View style={{marginBottom: 10, paddingHorizontal: 20, backgroundColor: '#8A388F', paddingBottom: 10, }}>
@@ -105,12 +101,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
       },
       actionBtn: {
-        width: 80,
-        height: 30,
+        width: 50,
+        height: 50,
         backgroundColor: '#8A388F',
         borderRadius: 30,
         paddingHorizontal: 5,
-        flexDirection: 'row',
+        // flexDirection: 'row',
         justifyContent: 'center',
         alignContent: 'center',
       },
