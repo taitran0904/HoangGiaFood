@@ -1,7 +1,7 @@
 //import liraries
 import React, {useEffect, useState} from 'react';
 import { View, Text, StyleSheet, Image, SafeAreaView, TouchableOpacity } from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Feather from 'react-native-vector-icons/Feather';
 import { FlatList } from "react-native-gesture-handler"
 // import drink from '../../data/drink'
 
@@ -44,9 +44,9 @@ useEffect(() => {
                 </View>
                 <View style={{ marginRight: 20, alignItems: 'center' }}>
                     <View style={styles.actionBtn}>
-                        <MaterialIcons name="remove" size={25} color="white" />
-                        <Text style={styles.amount}>0</Text>
-                        <MaterialIcons name="add" size={25} color="white" />
+                    <TouchableOpacity >
+                            <Feather style={{textAlign: 'center'}} name="plus" size={25} color="white" />    
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -99,12 +99,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     actionBtn: {
-        width: 80,
-        height: 30,
+        width: 50,
+        height: 50,
         backgroundColor: '#8A388F',
         borderRadius: 30,
         paddingHorizontal: 5,
-        flexDirection: 'row',
+        // flexDirection: 'row',
         justifyContent: 'center',
         alignContent: 'center',
     },

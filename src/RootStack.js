@@ -12,6 +12,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import SignInScreen from './Screen/SignInScreen'
 import SignUpScreen from './Screen/SignUpScreen'
+import ChangePass from './Screen/ChangePass'
 
 import HGScreen from './Screen/HGScreen'
 import StatisticsScreen from './Screen/StatisticsScreen'
@@ -79,6 +80,9 @@ const MyStack = () => {
       <Stack.Screen 
       options={{headerShown: false}}
       name="SignUpScreen" component={SignUpScreen} />
+      <Stack.Screen 
+      options={{headerShown: false}}
+      name="ChangePass" component={ChangePass} />
       <Stack.Screen 
         
         name="HomeScreen" 

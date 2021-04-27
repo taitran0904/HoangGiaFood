@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react'
-import { View, Text, SafeAreaView, StyleSheet, Dimensions, Image } from 'react-native'
+import {View, Text, SafeAreaView, StyleSheet, Dimensions, Image } from 'react-native'
 import { FlatList, TouchableHighlight } from "react-native-gesture-handler"
+import {Picker} from '@react-native-community/picker'
 
 import {Header} from "react-native-elements"
 
-import numTable from '../../data/numTable'
 import { openDatabase } from 'react-native-sqlite-storage';
 
 var db = openDatabase({ name: 'hg.db', createFromLocation: '~hg.db' });
@@ -15,6 +15,7 @@ const cardWidth = width / 2 - 20;
 
 const HGSCreen = ({navigation}) => {
 
+    const [selectedValue,setSelectedValue] = useState("1");
     const [items, setItems] = useState([]);
 useEffect(() => {
     db.transaction((tx) => {
@@ -39,8 +40,8 @@ useEffect(() => {
                 activeOpacity={0.9}
                 onPress={() => navigation.navigate("OrderScreen")}
                 >
-                { 
-                    item.status == 0 ? 
+                {item.id_zones == selectedValue && 
+                    (item.status == '0' ? 
                     <View style={[styles.eattable,{backgroundColor: 'white'}]}>
                         <View style={styles.etContainer}>
                             <Text style={{fontSize: 18, fontWeight: 'bold', color: '#8A388F'}}>{item.table_name}</Text>
@@ -51,7 +52,7 @@ useEffect(() => {
                         <View style={styles.etContainer}>
                             <Text style={{fontSize: 18, fontWeight: 'bold', color: 'white'}}>{item.table_name}</Text>
                         </View>
-                    </View> 
+                    </View>) 
                 }
             </TouchableHighlight>
         );
@@ -68,6 +69,16 @@ useEffect(() => {
             backgroundColor= "#8A388F"
              height={130}
         />
+        <View style={{alignItems: 'center'}}>
+            <Picker
+                style={{width:'40%'}}
+                selectedValue={selectedValue}
+                onValueChange={(itemValue,itemIndex) => setSelectedValue(itemValue)}
+            >
+                <Picker.item label="Khu A" value="1"/>
+                <Picker.item label="Khu B" value="2"/>
+            </Picker>
+        </View>
             <FlatList
                 showsVerticalScrollIndicator={false}
                 numColumns={2}

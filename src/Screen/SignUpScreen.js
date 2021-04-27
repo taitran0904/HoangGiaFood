@@ -20,6 +20,8 @@ const SignUpScreen = ({navigation}) => {
   const [pass, setpass] = useState('');
   const [conpass, setconpass] = useState('');
   const [email, setemail] = useState('');
+  const [isSecureEntry, setisSecureEntry] = useState(true);
+  const [isConSecureEntry, setisConSecureEntry] = useState(true);
 
   const register = () => {
     if (!user) {
@@ -94,43 +96,25 @@ const SignUpScreen = ({navigation}) => {
             style={styles.textinput}
             onChangeText={text => setuser(text)}
           />
-          {/* {this.state.check_textInputChange ? */}
-          <Animatable.View animation="bounceIn">
-            <Feather name="check-circle" size={20} color="green" />
-          </Animatable.View>
-          {/* : null} */}
         </View>
         <Text style={[styles.text_footer, {marginTop: 30}]}>MẬT KHẨU</Text>
         <View style={styles.action}>
           <Feather name="lock" size={20} color="#8A388F" />
-          {/* {this.state.secureTextEntry ? */}
-          {/* <TextInput
-                        placeholder="Mật khẩu"
-                        secureTextEntry={true}
-                        style={styles.textinput}
-                        // value={this.state.password}
-                        // onChangeText={(text)=> this.setState({
-                        //     password: text
-                        // })}
-                    /> */}
-          {/* : */}
           <TextInput
             placeholder="Mật khẩu"
-            secureTextEntry={true}
+            secureTextEntry={isSecureEntry}
             style={styles.textinput}
-            // value={this.state.password}
-            onChangeText={text => setpass(text)}
-            // })}
+            onChangeText={text => setpass(text)} 
           />
-          {/* } */}
           <TouchableOpacity
-          // onPress={()=> this.secureTextEntry()}
-          >
-            {/* {this.state.secureTextEntry ? */}
-            {/* <Feather name="eye-off" size={20} color="gray"/>  */}
-            {/* : */}
-            <Feather name="eye" size={20} color="gray" />
-            {/* } */}
+            onPress={() => {
+              setisSecureEntry(prev => !prev);
+            }}>
+            {isSecureEntry ? (
+              <Feather name="eye-off" size={20} color="#8A388F" />
+            ) : (
+              <Feather name="eye" size={20} color="#8A388F" />
+            )}
           </TouchableOpacity>
         </View>
 
@@ -139,33 +123,21 @@ const SignUpScreen = ({navigation}) => {
         </Text>
         <View style={styles.action}>
           <Feather name="lock" size={20} color="#8A388F" />
-          {/* {this.state.secureTextEntry_cf ? */}
-          {/* <TextInput
-                        placeholder="Nhập lại mật khẩu"
-                        secureTextEntry={true}
-                        style={styles.textinput}
-                        // value={this.state.password_cf}
-                        // onChangeText={(text)=> this.setState({
-                        //     password_cf: text
-                        // })}
-                    /> */}
-          {/* : */}
           <TextInput
             placeholder="Nhập lại mật khẩu"
-            secureTextEntry={true}
+            secureTextEntry={isConSecureEntry}
             style={styles.textinput}
-            // value={this.state.password_cf}
             onChangeText={text => setconpass(text)}
           />
-          {/* } */}
           <TouchableOpacity
-          // onPress={()=> this.secureTextEntry_cf()}
-          >
-            {/* {this.state.secureTextEntry_cf ? */}
-            {/* <Feather name="eye-off" size={20} color="gray"/>  */}
-            {/* : */}
-            <Feather name="eye" size={20} color="gray" />
-            {/* } */}
+            onPress={() => {
+              setisConSecureEntry(prev => !prev);
+            }}>
+            {isConSecureEntry ? (
+              <Feather name="eye-off" size={20} color="#8A388F" />
+            ) : (
+              <Feather name="eye" size={20} color="#8A388F" />
+            )}
           </TouchableOpacity>
         </View>
         <Text style={[styles.text_footer, {marginTop: 30}]}>E-MAIL</Text>
@@ -177,12 +149,9 @@ const SignUpScreen = ({navigation}) => {
             style={styles.textinput}
             onChangeText={text => setemail(text)}
           />
-          {/* {this.state.check_textInputChange ?
-                    <Animatable.View animation="bounceIn">
-                    <Feather name="check-circle" size={20} color="green" /></Animatable.View> : null} */}
         </View>
         <TouchableOpacity
-          // onPress={() => navigation.navigate("SignInScreen")}
+          
           onPress={register}
           style={[
             styles.signIn,
